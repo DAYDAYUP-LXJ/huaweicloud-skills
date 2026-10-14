@@ -116,7 +116,7 @@
 
 | # | Criterion | Verification | Status |
 |---|-----------|--------------|--------|
-| AC-50 | No hardcoded AK/SK in SKILL.md or scripts | `grep -r "AK\|SK\|ACCESS_KEY\|SECRET" skills/huawei-cloud-cloudrobo-asset/` | ☐ |
+| AC-50 | No hardcoded AK/SK in SKILL.md or scripts | `grep -r "AK\|SK\|ACCESS_KEY\|SECRET" skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/` | ☐ |
 | AC-51 | Credentials read from environment variables | Check docs reference `HUAWEI_CLOUD_AK`/`HUAWEI_CLOUD_SK` | ☐ |
 | AC-52 | Mutating operations require user confirmation | Check SKILL.md Parameter Confirmation section | ☐ |
 
@@ -124,21 +124,21 @@
 
 | # | Criterion | Verification | Status |
 |---|-----------|--------------|--------|
-| AC-53 | SKILL.md has valid frontmatter | `grep '^---$' skills/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
+| AC-53 | SKILL.md has valid frontmatter | `grep '^---$' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
 | AC-54 | Frontmatter has name + description + tags | Check frontmatter fields | ☐ |
-| AC-55 | Description includes `Triggers include:` | `grep 'Triggers include:' skills/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
+| AC-55 | Description includes `Triggers include:` | `grep 'Triggers include:' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
 | AC-56 | All required sections present | Check Overview/Prerequisites/Workflow/Core Commands/Parameter Confirmation/Reference Documents | ☐ |
 | AC-57 | Bilingual section headers | `grep '##.*概述'`, `grep '##.*前置条件'`, etc. | ☐ |
-| AC-58 | references/ directory exists with required files | `ls skills/huawei-cloud-cloudrobo-asset/references/` | ☐ |
-| AC-59 | scripts/test-cli-commands.sh exists | `ls skills/huawei-cloud-cloudrobo-asset/scripts/` | ☐ |
-| AC-60 | templates/test-vars.json exists | `ls skills/huawei-cloud-cloudrobo-asset/templates/` | ☐ |
+| AC-58 | references/ directory exists with required files | `ls skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/references/` | ☐ |
+| AC-59 | scripts/test-cli-commands.sh exists | `ls skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/scripts/` | ☐ |
+| AC-60 | templates/test-vars.json exists | `ls skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/templates/` | ☐ |
 
 ### Constraints 约束
 
 | # | Criterion | Verification | Status |
 |---|-----------|--------------|--------|
-| AC-61 | Directory size ≤ 40 MB | `du -sh skills/huawei-cloud-cloudrobo-asset/` | ☐ |
-| AC-62 | File count ≤ 30 | `find skills/huawei-cloud-cloudrobo-asset/ -type f \| wc -l` | ☐ |
+| AC-61 | Directory size ≤ 40 MB | `du -sh skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/` | ☐ |
+| AC-62 | File count ≤ 30 | `find skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/ -type f \| wc -l` | ☐ |
 | AC-63 | All files have allowed extensions | Check for .md/.sh/.json/.yaml/.py only | ☐ |
 | AC-64 | No fabricated API paths | All paths match SDK source `_url()` calls | ☐ |
 

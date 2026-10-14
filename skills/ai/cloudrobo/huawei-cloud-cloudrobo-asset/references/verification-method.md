@@ -6,52 +6,52 @@
 
 ```bash
 # Verify skill directory structure
-ls -la skills/huawei-cloud-cloudrobo-asset/
-ls -la skills/huawei-cloud-cloudrobo-asset/references/
-ls -la skills/huawei-cloud-cloudrobo-asset/scripts/
-ls -la skills/huawei-cloud-cloudrobo-asset/templates/
+ls -la skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/
+ls -la skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/references/
+ls -la skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/scripts/
+ls -la skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/templates/
 ```
 
 ### Frontmatter Validation Frontmatter验证
 
 ```bash
 # Check frontmatter exists
-grep '^---$' skills/huawei-cloud-cloudrobo-asset/SKILL.md | head -2
+grep '^---$' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md | head -2
 
 # Check name field
-grep '^name:' skills/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '^name:' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
 
 # Check description field with triggers
-grep 'Triggers include:' skills/huawei-cloud-cloudrobo-asset/SKILL.md
+grep 'Triggers include:' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
 
 # Check tags field
-grep '^tags:' skills/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '^tags:' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
 ```
 
 ### Section Validation 章节验证
 
 ```bash
 # Required sections (bilingual headers)
-grep '##.*概述' skills/huawei-cloud-cloudrobo-asset/SKILL.md
-grep '##.*前置条件' skills/huawei-cloud-cloudrobo-asset/SKILL.md
-grep '##.*工作流' skills/huawei-cloud-cloudrobo-asset/SKILL.md
-grep '##.*核心命令' skills/huawei-cloud-cloudrobo-asset/SKILL.md
-grep '##.*参数确认' skills/huawei-cloud-cloudrobo-asset/SKILL.md
-grep '##.*参考文档' skills/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '##.*概述' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '##.*前置条件' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '##.*工作流' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '##.*核心命令' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '##.*参数确认' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
+grep '##.*参考文档' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md
 ```
 
 ### File Size Constraint 文件大小约束
 
 ```bash
 # Total skill directory size must not exceed 40 MB
-du -sh skills/huawei-cloud-cloudrobo-asset/
+du -sh skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/
 ```
 
 ### File Count Constraint 文件数量约束
 
 ```bash
 # Total files must not exceed 30
-find skills/huawei-cloud-cloudrobo-asset/ -type f | wc -l
+find skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/ -type f | wc -l
 ```
 
 ## Functional Testing 功能测试
@@ -59,13 +59,13 @@ find skills/huawei-cloud-cloudrobo-asset/ -type f | wc -l
 ### CLI Testing CLI测试
 
 ```bash
-bash skills/huawei-cloud-cloudrobo-asset/scripts/test-cli-commands.sh skills/huawei-cloud-cloudrobo-asset --executor cli
+bash skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/scripts/test-cli-commands.sh skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset --executor cli
 ```
 
 ### SDK Testing SDK测试
 
 ```bash
-bash skills/huawei-cloud-cloudrobo-asset/scripts/test-cli-commands.sh skills/huawei-cloud-cloudrobo-asset --executor sdk
+bash skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/scripts/test-cli-commands.sh skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset --executor sdk
 ```
 
 ## Test Case List 测试用例列表
