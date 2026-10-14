@@ -91,10 +91,24 @@
 | AC-47 | `import-asset` frontmatter overrides CLI args | Create README.md with `type: model`, run with `--type dataset`; verify model type used | ☐ |
 | AC-48 | `export-asset` preserves existing README.md body | Export to folder with existing README.md; verify body preserved, frontmatter replaced | ☐ |
 | AC-49 | `import-asset` with invalid frontmatter YAML falls back silently | Create README.md with invalid YAML frontmatter, run import-asset; verify import proceeds with CLI args, no crash | ☐ |
-| AC-49a | `import-asset` Mode 3 defaults to incremental upload | Run `import-asset --asset-id <id> --version-id <vid> --local-path ./dir` with some files already on OBS; verify existing files skipped, only new files uploaded | ☐ |
-| AC-49b | `import-asset` Mode 3 with `--overwrite` forces re-upload | Run with `--overwrite`; verify all files re-uploaded even if they exist on OBS | ☐ |
+| AC-49a | `import-asset` Mode 3 reuses version and uploads files | Run `import-asset --asset-id <id> --version-id <vid> --local-path ./dir`; verify files uploaded to OBS (same-name objects are overwritten idempotently) | ☐ |
 | AC-49c | `import-asset` updates CREATING→DRAFT after upload | Run import without `--status`; verify version status is `CREATING` during upload, then `DRAFT` after upload succeeds | ☐ |
 | AC-49d | `import-asset` preserves user-specified status | Run import with `status: RELEASE` in frontmatter; verify version status remains `RELEASE` after upload (no auto-update) | ☐ |
+| AC-49e | `import-asset` rejects image type | Run `import-asset --catalog-id <id> --type image --local-path ./img`; verify UsageError "image assets are not supported by import-asset" | ☐ |
+| AC-49f | `import-asset` imports algorithm with code upload | Run `import-asset --catalog-id <id> --type algorithm --tags Train --local-path ./algo`; verify code uploaded to `{catalog.url}/{asset_id}/{version_id}/` and version code_dir updated to actual path | ☐ |
+| AC-49g | `create-asset` algorithm/image requires tags | Run `create-asset --type algorithm --ext-metadata '{"engine":...,"command":...}'` without tags; verify ValidationError "tags is required" | ☐ |
+| AC-49h | `create-asset` algorithm tags subset of image tags | Create image with tags `["Train","Data Processing"]`, create algorithm referencing it with `--tags Train`; verify success; with `--tags Notebook` verify ValidationError "must be a subset of" | ☐ |
+| AC-49i | `create-asset` algorithm sub_type is dropped | Run `create-asset --catalog-id <id> --type algorithm --sub-type training --tags Train --ext-metadata '{"engine":...,"command":...}'`; verify asset created and returned asset has no sub_type (client drops it) | ☐ |
+| AC-49j | `create-asset` image sub_type is ignored | Run `create-asset --catalog-id <id> --type image --sub-type inference --tags "Data Processing" --ext-metadata '{"arch":"x86_64","device_type":["CPU"]}'`; verify no error and asset has no sub_type | ☐ |
+| AC-49k | `import-asset` algorithm Mode 2 creates new version | Run `import-asset --asset-id <algo-id> --type algorithm --tags Train --local-path ./algo` (no --catalog-id); verify new version created, code uploaded to `{catalog.url}/{asset_id}/{version_id}/`, code_dir updated | ☐ |
+| AC-49l | `import-asset` algorithm Mode 3 rejected | Run `import-asset --asset-id <algo-id> --version-id <vid> --type algorithm --local-path ./algo`; verify ValueError "not supported for algorithm assets" | ☐ |
+| AC-49m | `import-asset` new version requires ext_metadata | Run `import-asset --asset-id <model-id> --local-path ./dir` without --ext-metadata; verify ValueError "ext_metadata is required to create a new version" | ☐ |
+| AC-49n | `export-asset` algorithm downloads from code_dir | Run `export-asset --asset-id <algo-id> --local-path ./out`; verify files downloaded from `ext_metadata.code_dir` OBS path | ☐ |
+| AC-49o | `export-asset` image type rejected | Run `export-asset --asset-id <image-id> --local-path ./out`; verify ValueError "does not support image assets" | ☐ |
+| AC-49p | `import-asset` algorithm Mode 2 requires ext_metadata | Run `import-asset --asset-id <algo-id> --local-path ./algo` without --ext-metadata; verify ValueError "ext_metadata is required to create a new version for algorithm asset" | ☐ |
+| AC-49q | `import-asset` Mode 3 SDK layer rejects image | Call SDK `import_asset(asset_id=<img-id>, version_id=<vid>, ...)` directly (bypass CLI); verify ValueError "import_asset does not support image assets" | ☐ |
+| AC-49r | `export-asset` algorithm missing code_dir error | Run `export-asset --asset-id <algo-id-no-code> --local-path ./out` on algorithm with empty ext_metadata; verify RuntimeError contains "code_dir" and recovery guidance | ☐ |
+| AC-49s | `export-asset` local_path not found raises FileNotFoundError | Run `export-asset --asset-id <id> --local-path /nonexistent`; verify FileNotFoundError "Local path does not exist" | ☐ |
 
 ## Non-Functional Criteria 非功能标准
 
@@ -102,7 +116,7 @@
 
 | # | Criterion | Verification | Status |
 |---|-----------|--------------|--------|
-| AC-50 | No hardcoded AK/SK in SKILL.md or scripts | `grep -r "AK\|SK\|ACCESS_KEY\|SECRET" skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/` | ☐ |
+| AC-50 | No hardcoded AK/SK in SKILL.md or scripts | `grep -r "AK\|SK\|ACCESS_KEY\|SECRET" skills/huawei-cloud-cloudrobo-asset/` | ☐ |
 | AC-51 | Credentials read from environment variables | Check docs reference `HUAWEI_CLOUD_AK`/`HUAWEI_CLOUD_SK` | ☐ |
 | AC-52 | Mutating operations require user confirmation | Check SKILL.md Parameter Confirmation section | ☐ |
 
@@ -110,21 +124,21 @@
 
 | # | Criterion | Verification | Status |
 |---|-----------|--------------|--------|
-| AC-53 | SKILL.md has valid frontmatter | `grep '^---$' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
+| AC-53 | SKILL.md has valid frontmatter | `grep '^---$' skills/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
 | AC-54 | Frontmatter has name + description + tags | Check frontmatter fields | ☐ |
-| AC-55 | Description includes `Triggers include:` | `grep 'Triggers include:' skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
+| AC-55 | Description includes `Triggers include:` | `grep 'Triggers include:' skills/huawei-cloud-cloudrobo-asset/SKILL.md` | ☐ |
 | AC-56 | All required sections present | Check Overview/Prerequisites/Workflow/Core Commands/Parameter Confirmation/Reference Documents | ☐ |
 | AC-57 | Bilingual section headers | `grep '##.*概述'`, `grep '##.*前置条件'`, etc. | ☐ |
-| AC-58 | references/ directory exists with required files | `ls skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/references/` | ☐ |
-| AC-59 | scripts/test-cli-commands.sh exists | `ls skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/scripts/` | ☐ |
-| AC-60 | templates/test-vars.json exists | `ls skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/templates/` | ☐ |
+| AC-58 | references/ directory exists with required files | `ls skills/huawei-cloud-cloudrobo-asset/references/` | ☐ |
+| AC-59 | scripts/test-cli-commands.sh exists | `ls skills/huawei-cloud-cloudrobo-asset/scripts/` | ☐ |
+| AC-60 | templates/test-vars.json exists | `ls skills/huawei-cloud-cloudrobo-asset/templates/` | ☐ |
 
 ### Constraints 约束
 
 | # | Criterion | Verification | Status |
 |---|-----------|--------------|--------|
-| AC-61 | Directory size ≤ 40 MB | `du -sh skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/` | ☐ |
-| AC-62 | File count ≤ 30 | `find skills/ai/cloudrobo/huawei-cloud-cloudrobo-asset/ -type f \| wc -l` | ☐ |
+| AC-61 | Directory size ≤ 40 MB | `du -sh skills/huawei-cloud-cloudrobo-asset/` | ☐ |
+| AC-62 | File count ≤ 30 | `find skills/huawei-cloud-cloudrobo-asset/ -type f \| wc -l` | ☐ |
 | AC-63 | All files have allowed extensions | Check for .md/.sh/.json/.yaml/.py only | ☐ |
 | AC-64 | No fabricated API paths | All paths match SDK source `_url()` calls | ☐ |
 
